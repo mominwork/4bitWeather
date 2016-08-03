@@ -25,6 +25,9 @@ public class MainActivity extends AppCompatActivity {
     //String poetUrl = "http://nerdcastlebd.com/_old-site/web_service/banglapoems/index.php/poets/all/format/json";
 
 
+    CurrentWeatherURL currentWeatherURL;
+
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -87,12 +90,15 @@ public class MainActivity extends AppCompatActivity {
 
         String searchInput = "Dhaka";
 
+
+
         if (listOfCities.containsKey(searchInput)) {
 
             String correspondingValueOfKey = listOfCities.get(searchInput);
-            String url = getUrl(correspondingValueOfKey);
 
-            getWeatherInfo(url);
+            currentWeatherURL = new CurrentWeatherURL(correspondingValueOfKey, "metric");
+
+            getCurrentWeatherInfo(currentWeatherURL.getUrl());
 
             Toast.makeText(MainActivity.this, correspondingValueOfKey, Toast.LENGTH_SHORT).show();
 
@@ -105,18 +111,8 @@ public class MainActivity extends AppCompatActivity {
     }
 
 
-    public String getUrl(String value) {
 
-        String cityId = value;
-        String metric = "metric";
-
-        String url = "http://api.openweathermap.org/data/2.5/weather?id=" + cityId + "&units=" + metric + "&appid=0a3d6f75ff8e0621c702d3bace78059c";
-
-        return url;
-
-    }
-
-    private void getWeatherInfo(String url) {
+    private void getCurrentWeatherInfo(String url) {
 
 
         JsonObjectRequest request = new JsonObjectRequest(Request.Method.GET, url, new Response.Listener<JSONObject>() {
@@ -217,10 +213,19 @@ public class MainActivity extends AppCompatActivity {
                     String weatherCondition = weatherObject.getString("main");
                     //weatherConditionTV.setText(weatherCondition);
 
+                    Toast.makeText(MainActivity.this, weatherCondition, Toast.LENGTH_SHORT).show();
+
+
                     String weatherDescription = weatherObject.getString("description");
                     //weatherDescriptionTV.setText(weatherDescription);
 
-                    Toast.makeText(MainActivity.this, weatherCondition, Toast.LENGTH_SHORT).show();
+                    Toast.makeText(MainActivity.this, weatherDescription, Toast.LENGTH_SHORT).show();
+
+                    String weatehrIcon = weatherObject.getString("icon");
+                    String iconURL = "http://openweathermap.org/img/w/"+weatehrIcon+".png";
+
+
+
 
                     Toast.makeText(MainActivity.this, weatherDescription, Toast.LENGTH_SHORT).show();
 
