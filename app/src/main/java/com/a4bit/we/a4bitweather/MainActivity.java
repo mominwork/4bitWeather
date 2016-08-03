@@ -1,5 +1,6 @@
 package com.a4bit.we.a4bitweather;
 
+import android.content.Context;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
@@ -112,6 +113,8 @@ public class MainActivity extends AppCompatActivity {
 
 
 
+
+
     private void getCurrentWeatherInfo(String url) {
 
 
@@ -219,15 +222,21 @@ public class MainActivity extends AppCompatActivity {
                     String weatherDescription = weatherObject.getString("description");
                     //weatherDescriptionTV.setText(weatherDescription);
 
-                    Toast.makeText(MainActivity.this, weatherDescription, Toast.LENGTH_SHORT).show();
-
-                    String weatehrIcon = weatherObject.getString("icon");
-                    String iconURL = "http://openweathermap.org/img/w/"+weatehrIcon+".png";
 
 
+                    Toast.makeText(MainActivity.this, "Weather Description: "+weatherDescription, Toast.LENGTH_SHORT).show();
+
+                    String weatherIcon = weatherObject.getString("icon");
+                    String selectImage = "image_"+weatherIcon;
+
+                    /*imageIM.setImageDrawable
+                            (
+                                    getResources().getDrawable(getResourceID(selectImage, "drawable",
+                                            getApplicationContext()))
+                            );*/
 
 
-                    Toast.makeText(MainActivity.this, weatherDescription, Toast.LENGTH_SHORT).show();
+                    Toast.makeText(MainActivity.this, "Image icon: "+weatherIcon, Toast.LENGTH_LONG).show();
 
                 } catch (JSONException e) {
                     e.printStackTrace();
@@ -245,5 +254,27 @@ public class MainActivity extends AppCompatActivity {
             }
         });
         AppController.getInstance().addToRequestQueue(request);
+    }
+
+
+    //The getResourceID method is important in setting image to view
+
+    protected final static int getResourceID
+            (final String resName, final String resType, final Context ctx)
+    {
+        final int ResourceID =
+                ctx.getResources().getIdentifier(resName, resType,
+                        ctx.getApplicationInfo().packageName);
+        if (ResourceID == 0)
+        {
+            throw new IllegalArgumentException
+                    (
+                            "No resource string found with name " + resName
+                    );
+        }
+        else
+        {
+            return ResourceID;
+        }
     }
 }
